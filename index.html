@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>趣味环保科普-垃圾分类大挑战</title>
+    <meta name="description" content="垃圾分类大挑战 — 融合科普与互动的H5游戏，三种模式可选，内置知识图鉴与成就系统。">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ==================== 新手引导遮罩 ==================== -->
+    <div id="tutorialOverlay" class="tutorial-overlay">
+        <div class="tutorial-step" id="tutStep1">
+            <span class="tut-emoji">👆</span>
+            <p>将垃圾卡片<strong>拖拽</strong>到对应垃圾桶</p>
+            <p class="tut-sub">或<strong>点击</strong>垃圾桶直接分类</p>
+        </div>
+        <div class="tutorial-step" id="tutStep2">
+            <span class="tut-emoji">⌨️</span>
+            <p>也可以按键盘 <strong>1 2 3 4</strong> 快速分类</p>
+            <p class="tut-sub">空格键暂停游戏</p>
+        </div>
+        <div class="tutorial-arrow">↓</div>
+        <button id="btnTutSkip" class="btn-primary">知道了，开始吧！</button>
+    </div>
+
+    <!-- ==================== 开始页面 ==================== -->
+    <div id="startPage" class="page active">
+        <div class="start-bg-deco">
+            <div class="deco-circle c1"></div>
+            <div class="deco-circle c2"></div>
+            <div class="deco-circle c3"></div>
+        </div>
+        <div class="start-container">
+            <div class="logo-area">
+                <div class="logo-icon">♻️</div>
+                <h1 class="game-title">趣味环保科普-垃圾分类大挑战</h1>
+                <p class="game-subtitle">学习分类知识 · 守护绿色地球</p>
+            </div>
+
+            <div class="mode-selection">
+                <h3 class="section-title">选择游戏模式</h3>
+                <div class="mode-cards">
+                    <div class="mode-card active" data-mode="classic">
+                        <span class="mode-icon">⏱️</span><span class="mode-name">经典模式</span><span class="mode-desc">90秒限时挑战</span>
+                    </div>
+                    <div class="mode-card" data-mode="endless">
+                        <span class="mode-icon">♾️</span><span class="mode-name">无尽模式</span><span class="mode-desc">5条命，拼最高分</span>
+                    </div>
+                    <div class="mode-card" data-mode="learn">
+                        <span class="mode-icon">📖</span><span class="mode-name">学习模式</span><span class="mode-desc">无压力，慢慢学</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-actions">
+                <button id="btnEncyclopedia" class="btn-home-action">📚 知识图鉴</button>
+                <button id="btnAchievements" class="btn-home-action">🏆 成就</button>
+                <button id="btnLeaderboard" class="btn-home-action">🏅 排行</button>
+            </div>
+
+            <div class="category-preview">
+                <div class="preview-item" style="background:#2b6ef0;"><span class="preview-icon">📄🫙</span><span class="preview-label">可回收</span></div>
+                <div class="preview-item" style="background:#d9363e;"><span class="preview-icon">🔋💊</span><span class="preview-label">有害</span></div>
+                <div class="preview-item" style="background:#389e0d;"><span class="preview-icon">🍎🦴</span><span class="preview-label">厨余</span></div>
+                <div class="preview-item" style="background:#595959;"><span class="preview-icon">🚬🧻</span><span class="preview-label">其他</span></div>
+            </div>
+
+            <div class="rules-box" id="rulesBox">
+                <h3>🎮 游戏规则</h3>
+                <ul id="rulesList">
+                    <li>将垃圾<span class="highlight">拖拽</span>到对应的分类桶中</li>
+                    <li>正确分类 <strong>+10分</strong>，快速回答额外加分</li>
+                    <li>连续正确可获<span class="combo">连击加分</span></li>
+                    <li>限时 <strong>90秒</strong>，挑战你的分类速度</li>
+                </ul>
+            </div>
+
+            <button id="btnStart" class="btn-primary">
+                <span class="btn-text">开始挑战</span><span class="btn-shine"></span>
+            </button>
+            <div id="highScoreDisplay" class="high-score-display"></div>
+        </div>
+    </div>
+
+    <!-- ==================== 知识图鉴弹窗 ==================== -->
+    <div id="encyclopediaOverlay" class="encyclopedia-overlay">
+        <div class="encyclopedia-container">
+            <div class="ency-header">
+                <h2>📚 垃圾分类知识图鉴</h2>
+                <button id="btnCloseEncy" class="btn-close">✕</button>
+            </div>
+            <div class="ency-tabs" id="encyTabs">
+                <button class="ency-tab active" data-cat="recyclable" style="--tab-color:#2b6ef0">♻️ 可回收物</button>
+                <button class="ency-tab" data-cat="hazardous" style="--tab-color:#d9363e">☣️ 有害垃圾</button>
+                <button class="ency-tab" data-cat="kitchen" style="--tab-color:#389e0d">🍃 厨余垃圾</button>
+                <button class="ency-tab" data-cat="other" style="--tab-color:#595959">🗑️ 其他垃圾</button>
+            </div>
+            <div class="ency-content" id="encyContent"></div>
+        </div>
+    </div>
+
+    <!-- ==================== 成就弹窗 ==================== -->
+    <div id="achievementsOverlay" class="achievements-overlay">
+        <div class="achievements-container">
+            <div class="ency-header">
+                <h2>🏆 成就</h2>
+                <button id="btnCloseAch" class="btn-close">✕</button>
+            </div>
+            <div class="ach-grid" id="achGrid"></div>
+            <p class="ach-total" id="achTotal"></p>
+            <button id="btnResetAll" class="btn-reset-all">⚠️ 重置所有数据</button>
+        </div>
+    </div>
+
+    <!-- ==================== 排行榜弹窗 ==================== -->
+    <div id="leaderboardOverlay" class="leaderboard-overlay">
+        <div class="leaderboard-container">
+            <div class="ency-header">
+                <h2>🏅 排行榜</h2>
+                <button id="btnCloseLb" class="btn-close">✕</button>
+            </div>
+            <div class="lb-tabs">
+                <button class="lb-tab active" data-mode="classic">⏱️ 经典模式</button>
+                <button class="lb-tab" data-mode="endless">♾️ 无尽模式</button>
+            </div>
+            <div class="lb-list" id="lbList"></div>
+            <button id="btnClearLb" class="btn-clear-lb">清空记录</button>
+        </div>
+    </div>
+
+    <!-- ==================== 游戏页面 ==================== -->
+    <div id="gamePage" class="page">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <button id="btnPause" class="btn-ctrl" title="暂停">⏸</button>
+                <button id="btnRestartGame" class="btn-ctrl" title="重新开始">🔄</button>
+                <button id="btnQuit" class="btn-ctrl btn-ctrl-danger" title="退出">✕</button>
+            </div>
+            <div class="stat-item timer-stat"><span class="stat-icon">⏱</span><span id="timer" class="stat-value">90</span></div>
+            <div class="stat-item"><span class="stat-icon">⭐</span><span id="score" class="stat-value">0</span></div>
+            <div class="stat-item combo-stat"><span class="stat-icon">🔥</span><span id="combo" class="stat-value">0</span></div>
+            <div class="stat-item"><span class="stat-icon">✅</span><span id="correctCount" class="stat-value">0/0</span></div>
+            <div class="stat-item lives-stat" id="livesStat" style="display:none;"><span class="stat-icon">❤️</span><span id="livesDisplay" class="stat-value">5</span></div>
+        </div>
+
+        <div id="pauseOverlay" class="pause-overlay">
+            <div class="pause-card">
+                <span class="pause-icon">⏸️</span><h2>游戏暂停</h2>
+                <button id="btnResume" class="btn-primary">继续游戏</button>
+                <button id="btnPauseRestart" class="btn-secondary">重新开始</button>
+                <button id="btnPauseQuit" class="btn-secondary">返回首页</button>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="garbage-section">
+                <p class="garbage-hint" id="garbageHint">拖拽垃圾卡或点击垃圾桶或按键盘 1-4</p>
+                <div id="garbageCard" class="garbage-card" draggable="true">
+                    <span id="garbageEmoji" class="garbage-emoji">🍎</span><span id="garbageName" class="garbage-name">苹果核</span>
+                </div>
+            </div>
+            <div id="floatTextContainer" class="float-text-container"></div>
+            <div class="bins-area" id="binsArea">
+                <div class="bin-wrapper" data-category="recyclable"><div class="bin-body" style="background:linear-gradient(180deg,#4d8bf7,#2b6ef0);"><span class="bin-icon">♻️</span><span class="bin-label">可回收物</span></div><span class="bin-shortcut">按 1</span></div>
+                <div class="bin-wrapper" data-category="hazardous"><div class="bin-body" style="background:linear-gradient(180deg,#f04a51,#d9363e);"><span class="bin-icon">☣️</span><span class="bin-label">有害垃圾</span></div><span class="bin-shortcut">按 2</span></div>
+                <div class="bin-wrapper" data-category="kitchen"><div class="bin-body" style="background:linear-gradient(180deg,#4caf50,#389e0d);"><span class="bin-icon">🍃</span><span class="bin-label">厨余垃圾</span></div><span class="bin-shortcut">按 3</span></div>
+                <div class="bin-wrapper" data-category="other"><div class="bin-body" style="background:linear-gradient(180deg,#808080,#595959);"><span class="bin-icon">🗑️</span><span class="bin-label">其他垃圾</span></div><span class="bin-shortcut">按 4</span></div>
+            </div>
+        </div>
+
+        <div id="knowledgePopup" class="knowledge-popup"><div class="popup-bar" id="popupBar"></div><div class="popup-content"><span id="popupEmoji" class="popup-emoji"></span><p id="popupText" class="popup-text"></p><p id="popupTip" class="popup-tip"></p></div></div>
+        <div id="milestonePopup" class="milestone-popup"></div>
+        <div id="particlesContainer"></div>
+        <div id="touchClone" class="touch-clone"></div>
+    </div>
+
+    <!-- ==================== 结果页面 ==================== -->
+    <div id="resultPage" class="page">
+        <div class="result-bg-deco"><div class="deco-circle c1"></div><div class="deco-circle c2"></div></div>
+        <div class="result-container">
+            <div class="result-header">
+                <div id="resultEmoji" class="result-emoji">🎉</div>
+                <h2 id="resultTitle">挑战结束</h2>
+                <p id="resultSubtitle" class="result-subtitle"></p>
+            </div>
+            <div class="result-stats">
+                <div class="result-stat highlight-stat"><span class="r-label">总得分</span><span id="resultScore" class="r-value">0</span></div>
+                <div class="result-stat"><span class="r-label">正确</span><span id="resultCorrect" class="r-value">0</span></div>
+                <div class="result-stat"><span class="r-label">错误</span><span id="resultWrong" class="r-value">0</span></div>
+                <div class="result-stat"><span class="r-label">正确率</span><span id="resultAccuracy" class="r-value">0%</span></div>
+                <div class="result-stat"><span class="r-label">最高连击</span><span id="resultMaxCombo" class="r-value">0</span></div>
+            </div>
+
+            <!-- 分类成绩分析 -->
+            <div class="category-analysis" id="categoryAnalysis">
+                <h3>📊 分类成绩分析</h3>
+                <div id="analysisBars"></div>
+                <p id="weaknessTip" class="weakness-tip"></p>
+            </div>
+
+            <!-- 新成就 -->
+            <div class="new-achievements" id="newAchievements" style="display:none;">
+                <h3>🏆 新解锁成就</h3>
+                <div id="newAchList" class="new-ach-list"></div>
+            </div>
+
+            <div class="result-feedback"><p id="resultFeedbackText"></p></div>
+            <div class="knowledge-review" id="knowledgeReview"><h3>📚 本局学到的分类知识</h3><div id="reviewList" class="review-list"></div></div>
+            <div class="result-btns">
+                <button id="btnRestart" class="btn-primary">再来一局</button>
+                <button id="btnBackHome" class="btn-secondary">返回首页</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>
