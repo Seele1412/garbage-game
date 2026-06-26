@@ -331,7 +331,6 @@
   }
 
   function startTimer() {
-    state.timeLeft = state.totalTime; updateStats();
     if (state.totalTime > 0) state.timerInterval = setInterval(() => { state.timeLeft--; updateStats(); if (state.timeLeft <= 5) AudioEngine.sfxTick(); if (state.timeLeft <= 0) endGame(); }, 1000);
   }
   function stopTimer() { if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval = null; } }
